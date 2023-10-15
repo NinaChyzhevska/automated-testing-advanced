@@ -1,4 +1,4 @@
-package com.nina.pages.example;
+package com.nina.ui.example;
 
 import com.codeborne.selenide.SelenideElement;
 

@@ -1,4 +1,4 @@
-package com.nina.configuration;
+package com.nina.ui.configuration;
 
 public class UITestsConfig {
     public static final long WAIT_TIMEOUT = 15000L;

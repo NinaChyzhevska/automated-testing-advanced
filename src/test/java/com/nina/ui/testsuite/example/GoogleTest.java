@@ -1,8 +1,8 @@
-package com.nina.testsuite.example;
+package com.nina.ui.testsuite.example;
 
-import com.nina.pages.example.GooglePage;
-import com.nina.pages.example.SearchResultsPage;
-import com.nina.testsuite.BaseTest;
+import com.nina.ui.example.GooglePage;
+import com.nina.ui.example.SearchResultsPage;
+import com.nina.ui.testsuite.BaseTest;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

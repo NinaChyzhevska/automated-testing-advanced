@@ -1,8 +1,8 @@
-package com.nina.util.driver;
+package com.nina.ui.util.driver;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import com.nina.configuration.UITestsConfig;
+import com.nina.ui.configuration.UITestsConfig;
 
 public class DriverManager {
     public static void initDriver() {

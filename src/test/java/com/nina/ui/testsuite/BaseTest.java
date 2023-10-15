@@ -1,6 +1,6 @@
-package com.nina.testsuite;
+package com.nina.ui.testsuite;
 
-import com.nina.util.driver.DriverManager;
+import com.nina.ui.util.driver.DriverManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
