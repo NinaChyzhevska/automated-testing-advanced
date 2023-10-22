@@ -19,7 +19,7 @@ public class GoogleTest extends BaseTest {
     @Test
     public void userCanSearch() {
         logger.info("This is a test method to verify that Selenide integration works.");
-        logger.warn("This test will be removed soon");
+        logger.warn("This test will be removed soon2");
         logger.info("Starting test for user: " + EnvironmentPropertyLoader.getProperty("userName"));
 
         open("https://duckduckgo.com");
