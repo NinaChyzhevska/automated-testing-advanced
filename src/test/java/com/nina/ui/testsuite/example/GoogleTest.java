@@ -3,6 +3,7 @@ package com.nina.ui.testsuite.example;
 import com.nina.ui.example.GooglePage;
 import com.nina.ui.example.SearchResultsPage;
 import com.nina.ui.testsuite.BaseTest;
+import com.nina.util.EnvironmentPropertyLoader;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ public class GoogleTest extends BaseTest {
     public void userCanSearch() {
         logger.info("This is a test method to verify that Selenide integration works.");
         logger.warn("This test will be removed soon");
+        logger.info("Starting test for user: " + EnvironmentPropertyLoader.getProperty("userName"));
 
         open("https://duckduckgo.com");
         new GooglePage().searchFor("selenide java");

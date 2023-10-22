@@ -29,4 +29,6 @@ dependencies {
 
 test {
     useJUnitPlatform()
+
+    systemProperties['envName'] = System.getProperty('envName') ?: 'local'
 }
