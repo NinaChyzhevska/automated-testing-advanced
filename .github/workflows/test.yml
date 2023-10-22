@@ -15,6 +15,8 @@ on:
 
 permissions:
   contents: read
+  actions: read
+  checks: write
 
 jobs:
   run-tests-on-linux:
@@ -46,4 +48,3 @@ jobs:
         name: Report Portal Tests
         path: build/test-results/test/TEST-*.xml
         reporter: java-junit
-        fail-on-error: true
