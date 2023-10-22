@@ -32,4 +32,5 @@ test {
 
     testLogging.showStandardStreams = true
     systemProperties['envName'] = System.getProperty('envName') ?: 'local'
+    systemProperties['selenide.headless'] = System.getProperty('selenide.headless') ?: 'false'
 }

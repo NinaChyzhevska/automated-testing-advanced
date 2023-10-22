@@ -9,6 +9,9 @@ public class DriverManager {
         Configuration.timeout = UITestsConfig.WAIT_TIMEOUT;
         Configuration.browserSize = UITestsConfig.BROWSER_SCREEN_SIZE;
         Configuration.browser = UITestsConfig.getBrowser();
+
+        var headlessProperty = System.getProperty("selenide.headless", "false");
+        Configuration.headless = Boolean.parseBoolean(headlessProperty);
     }
 
     public static void shutDownDriver() {
