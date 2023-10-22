@@ -20,6 +20,7 @@ permissions:
 
 jobs:
   run-tests-on-linux:
+    name: Run tests on Linux
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -45,6 +46,7 @@ jobs:
       uses: dorny/test-reporter@v1
       if: always()
       with:
-        name: Report Portal Tests
+        name: Tests Report
         path: build/test-results/test/TEST-*.xml
         reporter: java-junit
+        fail-on-error: true
