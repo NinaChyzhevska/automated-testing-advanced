@@ -36,10 +36,10 @@ jobs:
       with:
         arguments: build --no-parallel --no-daemon --console=plain -DenvName=local -Dselenide.headless=true
     - name: Report
-      uses: dorny/test-reporter@v1
+      uses: turing85/publish-report@v1
       if: always()
       with:
-        name: Tests Report
-        path: build/test-results/test/TEST-*.xml
-        reporter: java-junit
-        fail-on-error: true
+        report-name: Tests
+        report-path: build/test-results/test/TEST-*.xml
+        report-reporter: java-junit
+        report-fail-on-error: true
