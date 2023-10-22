@@ -39,7 +39,8 @@ jobs:
       uses: turing85/publish-report@v1
       if: always()
       with:
-        report-name: Tests
+        report-name: Report Portal Tests
         report-path: build/test-results/test/TEST-*.xml
         report-reporter: java-junit
         report-fail-on-error: true
+        recreate-comment: true
