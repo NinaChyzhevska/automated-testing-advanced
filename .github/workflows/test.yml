@@ -39,3 +39,11 @@ jobs:
         path: |
           **/build/reports
           **/build/test-results
+    - name: Report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Report Portal Tests
+        path: build/test-results/test/TEST-*.xml
+        reporter: java-junit
+        fail-on-error: true
