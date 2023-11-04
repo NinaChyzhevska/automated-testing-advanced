@@ -21,7 +21,7 @@ public class DashboardTest extends BaseAuthTest {
     private final DashboardClient dashboardClient = new DashboardClient(userSession);
 
     @ParameterizedTest
-    @MethodSource("dashboardDataProvider")
+    @MethodSource("com.nina.util.TestDataProvider#getDashboardDataForPositiveTest")
     public void createAndDeleteDashboardPositiveTest(String name, String description) {
         Dashboard created = dashboardClient.createDashboard(HttpStatus.SC_CREATED, name, description);
         Long id = created.getId();
@@ -35,13 +35,13 @@ public class DashboardTest extends BaseAuthTest {
     }
 
     @ParameterizedTest
-    @MethodSource("dashboardDataProviderForNegativeTest")
+    @MethodSource("com.nina.util.TestDataProvider#getDashboardDataForNegativeTest")
     public void createDashboardNegativeTest(String name, String description) {
         dashboardClient.createDashboard(HttpStatus.SC_BAD_REQUEST, name, description);
     }
 
     @ParameterizedTest
-    @MethodSource("dashboardDataProviderForSearchTest")
+    @MethodSource("com.nina.util.TestDataProvider#getDashboardDataForSearchTest")
     public void searchDashboardOnListByName(String name, String description) {
         Dashboard created = dashboardClient.createDashboard(HttpStatus.SC_CREATED, name, description);
 
@@ -80,36 +80,5 @@ public class DashboardTest extends BaseAuthTest {
     private void deleteDashboard(long id) {
         ResponseMessage deleteResult = dashboardClient.deleteDashboardById(id);
         assertEquals("Dashboard with ID = '" + id + "' successfully deleted.", deleteResult.getMessage());
-    }
-
-    private static Object[][] dashboardDataProviderForSearchTest() {
-        return new Object[][] {
-                {"Chinese chars 是一个带有特殊字符的消息", "description jaCNlF9gqMvCEQRirEWnMFo0DIaXPC2ASqrdShK2meX4N58pLUSrNxuS6IudJOKC0F3X0SUMCXAHUwybE8ZPaTqPB"},
-                {"desc empty", ""},
-                {"Boundary 128 Positive Test naCNlF9gqMvCEQRirEWnMFo0DIaXPC2ASqrdShK2meX4N58pLUSrNxuS6IudJOKC0F3X0SUMCXAHUwybE8ZPaTqPB123456trtrtf", "desc"},
-                {"1234567 Numbers", "desc"},
-                {"Cyrillic characters абвгдЇьґєя", "desc"},
-                {"<>?][}{|/&$^*;:!@#~% other common special chars", "desc"},
-                {"one", "desc"},
-        };
-    }
-
-    private static Object[][] dashboardDataProvider() {
-        return new Object[][] {
-                {"Chinese chars 这是一个带有特殊字符的消息", "description jaCNlF9gqMvCEQRirEWnMFo0DIaXPC2ASqrdShK2meX4N58pLUSrNxuS6IudJOKC0F3X0SUMCXAHUwybE8ZPaTqPB"},
-                {"empty desc", ""},
-                {"Boundary 128 Positive Test jaCNlF9gqMvCEQRirEWnMFo0DIaXPC2ASqrdShK2meX4N58pLUSrNxuS6IudJOKC0F3X0SUMCXAHUwybE8ZPaTqPB123456trtrtf", "desc"},
-                {"12345 Numbers", "desc"},
-                {"Cyrillic characters абвгдЇьґє", "desc"},
-                {"&<>?][}{|/$^*;:!@#~% other common special chars", "desc"},
-                {"min", "desc"},
-        };
-    }
-
-    private static Object[][] dashboardDataProviderForNegativeTest() {
-        return new Object[][] {
-                {"t2", "negativeTest"},
-                {"MaxCharsLength OutOfBounds NegativeTest jaCNlF9gqMvCEQRirEWnMFo0DIaXPC2ASqrdShK2meX4N58pLUSrNxuS6IudJOKC0F3X0SUMCXAHUwybE8ZPaTqPB", "desc"}
-        };
     }
 }
