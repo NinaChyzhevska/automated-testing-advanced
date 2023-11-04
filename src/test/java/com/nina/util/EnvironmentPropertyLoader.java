@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public final class EnvironmentPropertyLoader {
     private static final Logger log = LoggerFactory.getLogger(EnvironmentPropertyLoader.class);
-    private static final String DEFAULT_ENV_PROPS = "local";
+    private static final String DEFAULT_ENV_PROPS = "prod";
     private static final String PROPERTIES_EXTENSION = ".properties";
     private static final String ENV_PARAM = "envName";
     private static final String PROPERTIES_PATH = "properties/";

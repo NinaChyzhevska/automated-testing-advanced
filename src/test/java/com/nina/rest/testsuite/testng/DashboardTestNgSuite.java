@@ -1,4 +1,4 @@
-package com.nina.rest.testsuite;
+package com.nina.rest.testsuite.testng;
 
 import com.nina.rest.client.DashboardClient;
 import com.nina.rest.model.Dashboard;
@@ -6,28 +6,27 @@ import com.nina.rest.model.Widget;
 import com.nina.rest.model.response.ResponseMessage;
 import com.nina.rest.model.response.SearchDashboardsResponse;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import java.util.Date;
 import java.util.List;
 
 import static com.nina.rest.config.Config.TEST_WIDGET_ID;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
-public class DashboardTest extends BaseAuthTest {
+public class DashboardTestNgSuite extends TestNgBaseAuthTest {
 
-    private static DashboardClient dashboardClient;
+    private DashboardClient dashboardClient;
 
-    @BeforeAll
-    public static void setUp() {
-        dashboardClient = new DashboardClient(userSession);
+    @BeforeClass
+    public void setUp() {
+         dashboardClient = new DashboardClient(userSession);
     }
 
-    @ParameterizedTest
-    @MethodSource("com.nina.util.TestDataProvider#getDashboardDataForPositiveTest")
+    @Test(dataProviderClass = TestNgDataProviderAdapter.class, dataProvider = "dashboardDataForPositiveTest")
     public void createAndDeleteDashboardPositiveTest(String name, String description) {
         Dashboard created = dashboardClient.createDashboard(HttpStatus.SC_CREATED, name, description);
         Long id = created.getId();
@@ -40,14 +39,12 @@ public class DashboardTest extends BaseAuthTest {
         dashboardClient.getDashboardById(HttpStatus.SC_NOT_FOUND, id);
     }
 
-    @ParameterizedTest
-    @MethodSource("com.nina.util.TestDataProvider#getDashboardDataForNegativeTest")
+    @Test(dataProviderClass = TestNgDataProviderAdapter.class, dataProvider = "dashboardDataForNegativeTest")
     public void createDashboardNegativeTest(String name, String description) {
         dashboardClient.createDashboard(HttpStatus.SC_BAD_REQUEST, name, description);
     }
 
-    @ParameterizedTest
-    @MethodSource("com.nina.util.TestDataProvider#getDashboardDataForSearchTest")
+    @Test(dataProviderClass = TestNgDataProviderAdapter.class, dataProvider = "dashboardDataForSearchTest")
     public void searchDashboardOnListByName(String name, String description) {
         Dashboard created = dashboardClient.createDashboard(HttpStatus.SC_CREATED, name, description);
 
