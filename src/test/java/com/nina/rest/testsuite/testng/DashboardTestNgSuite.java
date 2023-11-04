@@ -6,6 +6,8 @@ import com.nina.rest.model.Widget;
 import com.nina.rest.model.response.ResponseMessage;
 import com.nina.rest.model.response.SearchDashboardsResponse;
 import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -13,11 +15,10 @@ import java.util.Date;
 import java.util.List;
 
 import static com.nina.rest.config.Config.TEST_WIDGET_ID;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 public class DashboardTestNgSuite extends TestNgBaseAuthTest {
+    private static final Logger logger = LoggerFactory.getLogger(DashboardTestNgSuite.class);
 
     private DashboardClient dashboardClient;
 
@@ -28,6 +29,7 @@ public class DashboardTestNgSuite extends TestNgBaseAuthTest {
 
     @Test(dataProviderClass = TestNgDataProviderAdapter.class, dataProvider = "dashboardDataForPositiveTest")
     public void createAndDeleteDashboardPositiveTest(String name, String description) {
+        logger.info("Starting positive dashboard creation test for " + name);
         Dashboard created = dashboardClient.createDashboard(HttpStatus.SC_CREATED, name, description);
         Long id = created.getId();
 
@@ -41,11 +43,13 @@ public class DashboardTestNgSuite extends TestNgBaseAuthTest {
 
     @Test(dataProviderClass = TestNgDataProviderAdapter.class, dataProvider = "dashboardDataForNegativeTest")
     public void createDashboardNegativeTest(String name, String description) {
+        logger.info("Starting negative dashboard creation test for " + name);
         dashboardClient.createDashboard(HttpStatus.SC_BAD_REQUEST, name, description);
     }
 
     @Test(dataProviderClass = TestNgDataProviderAdapter.class, dataProvider = "dashboardDataForSearchTest")
     public void searchDashboardOnListByName(String name, String description) {
+        logger.info("Starting dashboard search test for " + name);
         Dashboard created = dashboardClient.createDashboard(HttpStatus.SC_CREATED, name, description);
 
         SearchDashboardsResponse response = dashboardClient.searchDashboards(name);
@@ -67,7 +71,9 @@ public class DashboardTestNgSuite extends TestNgBaseAuthTest {
 
     @Test
     public void addWidgetToDashboard() {
-        Dashboard dashboard = dashboardClient.createDashboard(HttpStatus.SC_CREATED, "AUTO_Widget" + new Date(), "description");
+        String widgetName = "AUTO_Widget" + new Date();
+        logger.info("Starting widget adding to dashboard test for " + widgetName);
+        Dashboard dashboard = dashboardClient.createDashboard(HttpStatus.SC_CREATED, widgetName, "description");
         Widget widget = new Widget();
         widget.setWidgetId(TEST_WIDGET_ID);
         Long dashboardId = dashboard.getId();

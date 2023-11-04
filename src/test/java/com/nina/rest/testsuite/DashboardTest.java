@@ -8,8 +8,12 @@ import com.nina.rest.model.response.SearchDashboardsResponse;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.List;
@@ -17,7 +21,9 @@ import java.util.List;
 import static com.nina.rest.config.Config.TEST_WIDGET_ID;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class DashboardTest extends BaseAuthTest {
+    private static final Logger logger = LoggerFactory.getLogger(DashboardTest.class);
 
     private static DashboardClient dashboardClient;
 
@@ -29,6 +35,7 @@ public class DashboardTest extends BaseAuthTest {
     @ParameterizedTest
     @MethodSource("com.nina.util.TestDataProvider#getDashboardDataForPositiveTest")
     public void createAndDeleteDashboardPositiveTest(String name, String description) {
+        logger.info("Starting positive dashboard creation test for " + name);
         Dashboard created = dashboardClient.createDashboard(HttpStatus.SC_CREATED, name, description);
         Long id = created.getId();
 
@@ -43,12 +50,14 @@ public class DashboardTest extends BaseAuthTest {
     @ParameterizedTest
     @MethodSource("com.nina.util.TestDataProvider#getDashboardDataForNegativeTest")
     public void createDashboardNegativeTest(String name, String description) {
+        logger.info("Starting negative dashboard creation test for " + name);
         dashboardClient.createDashboard(HttpStatus.SC_BAD_REQUEST, name, description);
     }
 
     @ParameterizedTest
     @MethodSource("com.nina.util.TestDataProvider#getDashboardDataForSearchTest")
     public void searchDashboardOnListByName(String name, String description) {
+        logger.info("Starting dashboard search test for " + name);
         Dashboard created = dashboardClient.createDashboard(HttpStatus.SC_CREATED, name, description);
 
         SearchDashboardsResponse response = dashboardClient.searchDashboards(name);
@@ -70,7 +79,9 @@ public class DashboardTest extends BaseAuthTest {
 
     @Test
     public void addWidgetToDashboard() {
-        Dashboard dashboard = dashboardClient.createDashboard(HttpStatus.SC_CREATED, "AUTO_Widget" + new Date(), "description");
+        String widgetName = "AUTO_Widget" + new Date();
+        logger.info("Starting widget adding to dashboard test for " + widgetName);
+        Dashboard dashboard = dashboardClient.createDashboard(HttpStatus.SC_CREATED, widgetName, "description");
         Widget widget = new Widget();
         widget.setWidgetId(TEST_WIDGET_ID);
         Long dashboardId = dashboard.getId();
