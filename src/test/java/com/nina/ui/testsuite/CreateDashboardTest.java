@@ -1,9 +1,7 @@
-package com.nina.ui.testsuite.example;
+package com.nina.ui.testsuite;
 
-import com.codeborne.selenide.Selenide;
 import com.nina.ui.steps.DashboardsSteps;
 import com.nina.ui.steps.LoginSteps;
-import com.nina.ui.testsuite.BaseTest;
 import com.nina.util.EnvironmentPropertyLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,7 +21,10 @@ public class CreateDashboardTest extends BaseTest {
     @ParameterizedTest
     @ValueSource(strings = {"demo", "1333"})
     public void searchDashboard(String searchValue) {
-        Selenide.open("https://rp.epam.com/ui/#vinni_personal/dashboard");
-        new DashboardsSteps().searchDashboard(searchValue);
+        new DashboardsSteps()
+                .switchToDefaultProject()
+                .searchDashboard(searchValue)
+                .assertDashboardsSize(1)
+                .assertDashboardsListContains(searchValue);
     }
 }
