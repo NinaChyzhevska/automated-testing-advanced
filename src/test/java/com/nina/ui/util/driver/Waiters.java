@@ -13,16 +13,4 @@ public class Waiters {
                 .until(webDriver -> ((JavascriptExecutor) webDriver)
                         .executeScript("return document.readyState").equals("complete"));
     }
-
-    public static void waitUntil(Runnable function) {
-        Selenide.Wait().withTimeout(Duration.ofSeconds(DEFAULT_TIMEOUT_SECONDS))
-                .until(webDriver -> {
-                    try {
-                        function.run();
-                        return true;
-                    } catch (Throwable e) {
-                        return false;
-                    }
-                });
-    }
 }

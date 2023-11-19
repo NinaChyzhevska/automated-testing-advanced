@@ -9,10 +9,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static com.codeborne.selenide.Selenide.open;
 
-public class CreateDashboardTest extends BaseTest {
+public class SearchDashboardTest extends BaseTest {
 
     @BeforeEach
-    void login() {
+    public void login() {
         open(EnvironmentPropertyLoader.getProperty("hostUrl"));
         new LoginSteps().login(EnvironmentPropertyLoader.getProperty("userName"),
                 EnvironmentPropertyLoader.getProperty("userPassword"));
