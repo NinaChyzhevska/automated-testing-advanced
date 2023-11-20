@@ -3,6 +3,7 @@ package com.nina.rest.client;
 import com.nina.rest.config.Config;
 import com.nina.rest.model.*;
 import com.nina.rest.model.request.AddWidgetRequest;
+import com.nina.rest.model.response.DashboardResponse;
 import com.nina.rest.model.response.ResponseMessage;
 import com.nina.rest.model.response.SearchDashboardsResponse;
 import com.nina.util.EnvironmentPropertyLoader;
@@ -54,6 +55,23 @@ public class DashboardClient {
                 .log().body()
                 .statusCode(expectedStatusCode)
                 .extract().response().as(Dashboard.class);
+    }
+
+    public DashboardResponse getDashboardById(Long id) {
+        var response = given()
+                .log().uri()
+                .baseUri(EnvironmentPropertyLoader.getProperty("hostUrl"))
+                .pathParam("projectName", PROJECT_NAME)
+                .pathParam("dashboardId", id)
+                .auth().oauth2(userSession.getAccessToken())
+                .contentType(JSON)
+                .log().body().log().method().log().parameters()
+                .when()
+                .get(Config.DASHBOARD_BY_ID_PATH)
+                .then()
+                .log().body()
+                .extract().response();
+        return new DashboardResponse(response.as(Dashboard.class), response.getStatusCode());
     }
 
     public SearchDashboardsResponse searchDashboards(String value) {

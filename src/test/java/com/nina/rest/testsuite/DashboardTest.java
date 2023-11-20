@@ -79,9 +79,9 @@ public class DashboardTest extends BaseAuthTest {
 
     @Test
     public void addWidgetToDashboard() {
-        String widgetName = "AUTO_Widget" + new Date();
-        logger.info("Starting widget adding to dashboard test for " + widgetName);
-        Dashboard dashboard = dashboardClient.createDashboard(HttpStatus.SC_CREATED, widgetName, "description");
+        String dashboardName = "AUTO_Widget" + new Date();
+        logger.info("Starting widget adding to dashboard test for " + dashboardName);
+        Dashboard dashboard = dashboardClient.createDashboard(HttpStatus.SC_CREATED, dashboardName, "description");
         Widget widget = new Widget();
         widget.setWidgetId(TEST_WIDGET_ID);
         Long dashboardId = dashboard.getId();
