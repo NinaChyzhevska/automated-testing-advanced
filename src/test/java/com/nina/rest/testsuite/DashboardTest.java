@@ -47,6 +47,21 @@ public class DashboardTest extends BaseAuthTest {
         dashboardClient.getDashboardById(HttpStatus.SC_NOT_FOUND, id);
     }
 
+    @Test
+    public void updateDashboardTest() {
+        String dashboardName = "AUTO_" + new Date();
+        Dashboard dashboard = dashboardClient.createDashboard(HttpStatus.SC_CREATED, dashboardName, "description");
+        Long dashboardId = dashboard.getId();
+        String newDashboardName = "AUTO_UPDATED_NAME_ " + new Date();
+        String newDescription = "desc2";
+
+        dashboardClient.updateDashboard(dashboardId, newDashboardName, newDescription);
+        Dashboard searchResult = dashboardClient.getDashboardById(HttpStatus.SC_OK, dashboardId);
+        assertEquals(newDashboardName, searchResult.getName());
+        assertEquals(newDescription, searchResult.getDescription());
+
+    }
+
     @ParameterizedTest
     @MethodSource("com.nina.util.TestDataProvider#getDashboardDataForNegativeTest")
     public void createDashboardNegativeTest(String name, String description) {
@@ -78,7 +93,7 @@ public class DashboardTest extends BaseAuthTest {
     }
 
     @Test
-    public void addWidgetToDashboard() {
+    public void addAndRemoveWidgetFromDashboard() {
         String dashboardName = "AUTO_Widget" + new Date();
         logger.info("Starting widget adding to dashboard test for " + dashboardName);
         Dashboard dashboard = dashboardClient.createDashboard(HttpStatus.SC_CREATED, dashboardName, "description");
@@ -92,6 +107,11 @@ public class DashboardTest extends BaseAuthTest {
         List<Widget> widgets = searchResult.getWidgets();
         assertEquals(1, widgets.size());
         assertEquals(TEST_WIDGET_ID, widgets.get(0).getWidgetId());
+
+        dashboardClient.removeWidgetFromDashboard(dashboardId);
+        Dashboard searchResultAfterRemoval = dashboardClient.getDashboardById(HttpStatus.SC_OK, dashboardId);
+        List<Widget> widgetsCheck = searchResultAfterRemoval.getWidgets();
+        assertEquals(0, widgetsCheck.size());
     }
 
     private void deleteDashboard(long id) {
