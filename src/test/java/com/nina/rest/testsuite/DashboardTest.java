@@ -29,7 +29,7 @@ public class DashboardTest extends BaseAuthTest {
 
     @BeforeAll
     public static void setUp() {
-        dashboardClient = new DashboardClient(userSession);
+        dashboardClient = new DashboardClient(httpClient, userSession);
     }
 
     @ParameterizedTest
@@ -111,7 +111,7 @@ public class DashboardTest extends BaseAuthTest {
         dashboardClient.removeWidgetFromDashboard(dashboardId);
         Dashboard searchResultAfterRemoval = dashboardClient.getDashboardById(HttpStatus.SC_OK, dashboardId);
         List<Widget> widgetsCheck = searchResultAfterRemoval.getWidgets();
-        assertEquals(0, widgetsCheck.size());
+        assertTrue(widgetsCheck.isEmpty());
     }
 
     private void deleteDashboard(long id) {
