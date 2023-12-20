@@ -24,7 +24,7 @@ public class DashboardTestNgSuite extends TestNgBaseAuthTest {
 
     @BeforeClass
     public void setUp() {
-         dashboardClient = new DashboardClient(userSession);
+         dashboardClient = new DashboardClient(httpClient, userSession);
     }
 
     @Test(dataProviderClass = TestNgDataProviderAdapter.class, dataProvider = "dashboardDataForPositiveTest")
