@@ -41,7 +41,7 @@ public class Popup {
 
     private SelenideElement getSubmitBtn() {
         var btnText = StringUtils.capitalize(popupType.name().toLowerCase());
-        return $x("//button[text()='%s']".formatted(btnText));
+        return $x(".//button[text()='%s']".formatted(btnText));
     }
 
     public enum PopupType {
