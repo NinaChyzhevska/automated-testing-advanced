@@ -90,7 +90,6 @@ public class DashboardsSteps {
         dashboardDetailsPage.getFilterOption().click();
         dashboardDetailsPage.getButtonNextStep().click();
         new Popup(PopupType.ADD)
-                .waitToLoad()
                 .enterName(widgetName)
                 .submit();
         waitForElementVisibility(dashboardDetailsPage.getWidgetHeader(widgetName));

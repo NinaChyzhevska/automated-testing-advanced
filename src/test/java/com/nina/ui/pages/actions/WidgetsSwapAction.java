@@ -1,10 +1,9 @@
 package com.nina.ui.pages.actions;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.interactions.Actions;
-
-import java.util.List;
 
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Selenide.$$;
@@ -18,7 +17,7 @@ public class WidgetsSwapAction {
     private final String secondWidgetInitialPosition;
 
     public WidgetsSwapAction(String firstWidgetName, String secondWidgetName) {
-        var allWidgets = $$(".react-grid-item");
+        ElementsCollection allWidgets = $$(".react-grid-item");
         this.firstWidget = requireNonNull(findWidgetByName(allWidgets, firstWidgetName));
         this.secondWidget = requireNonNull(findWidgetByName(allWidgets, secondWidgetName));
         this.firstWidgetInitialPosition = requireNonNull(firstWidget.getAttribute("style"));
@@ -42,7 +41,7 @@ public class WidgetsSwapAction {
         return this;
     }
 
-    private SelenideElement findWidgetByName(List<SelenideElement> allWidgets, String name) {
+    private SelenideElement findWidgetByName(ElementsCollection allWidgets, String name) {
         for (var element : allWidgets) {
             var header = element.$x(".//div[contains(@class, 'widgetHeader__widget-name-block')]");
             if (name.equals(header.text())) {
