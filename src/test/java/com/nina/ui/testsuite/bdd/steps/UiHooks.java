@@ -1,6 +1,7 @@
 package com.nina.ui.testsuite.bdd.steps;
 
-import com.nina.ui.util.driver.DriverManager;
+import com.nina.ui.util.driver.WebBrowserDriver;
+import com.nina.ui.util.driver.WebDriverFactory;
 import io.cucumber.java.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,16 +9,19 @@ import org.slf4j.LoggerFactory;
 public class UiHooks {
     private static final Logger logger = LoggerFactory.getLogger(DashboardUiSteps.class);
 
+    private static WebBrowserDriver webDriver;
+
     @BeforeAll
     public static void init() {
-        logger.info("Driver initialization");
-        DriverManager.initDriver();
+        webDriver = WebDriverFactory.getWebDriver();
+        webDriver.initDriver();
     }
 
     @AfterAll
     public static void shutDown() {
-        logger.info("Browser shut down");
-        DriverManager.shutDownDriver();
+        if (webDriver != null) {
+            webDriver.shutdownDriver();
+        }
     }
 
     @Before

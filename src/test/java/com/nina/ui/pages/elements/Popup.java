@@ -1,47 +1,58 @@
 package com.nina.ui.pages.elements;
 
-import com.codeborne.selenide.SelenideElement;
+import com.nina.ui.util.driver.WebBrowserDriver;
+import com.nina.ui.util.driver.WebElement;
 import org.apache.commons.lang3.StringUtils;
 
-import static com.codeborne.selenide.Selenide.$x;
-import static com.nina.ui.util.driver.Waiters.*;
-
 public class Popup {
-    private final SelenideElement nameInput = $x("//input[@*[contains(., 'input__input')]]");
-    private final SelenideElement descriptionInput = $x("//textarea[@*[contains(., 'inputTextArea')]]");
-    private final SelenideElement modalLayout = $x(".//div[@*[contains(., 'modalLayout__modal-layout')]]");
-    private final SelenideElement submitBtn;
+    private final WebBrowserDriver driver;
     private final PopupType popupType;
 
-    public Popup(PopupType popupType) {
+    public Popup(WebBrowserDriver driver, PopupType popupType) {
+        this.driver = driver;
         this.popupType = popupType;
-        this.submitBtn = getSubmitBtn();
     }
 
     public Popup enterName(String name) {
-        waitForElementVisibility(nameInput);
+        var nameInput = getNameInput();
+        nameInput.waitForElementVisibility();
         nameInput.setValue(name);
         return this;
     }
 
     public Popup enterDescription(String description) {
-        waitForElementVisibility(descriptionInput);
+        var descriptionInput = getDescriptionInput();
+        descriptionInput.waitForElementVisibility();
         descriptionInput.setValue(description);
         return this;
     }
 
     public Popup waitToLoad() {
-        waitForElementVisibility(modalLayout);
+        getModalLayout().waitForElementVisibility();
         return this;
     }
 
     public void submit() {
+        var submitBtn = getSubmitBtn();
+        submitBtn.waitUntilElementToBeClickable();
         submitBtn.click();
     }
 
-    private SelenideElement getSubmitBtn() {
-        var btnText = StringUtils.capitalize(popupType.name().toLowerCase());
-        return $x(".//button[text()='%s']".formatted(btnText));
+    private WebElement getSubmitBtn() {
+        String btnText = StringUtils.capitalize(popupType.name().toLowerCase());
+        return driver.findElement(".//button[text()='" + btnText + "']");
+    }
+
+    private WebElement getNameInput() {
+        return driver.findElement("//input[@*[contains(., 'input__input')]]");
+    }
+
+    private WebElement getDescriptionInput() {
+        return driver.findElement("//textarea[@*[contains(., 'inputTextArea')]]");
+    }
+
+    private WebElement getModalLayout() {
+        return driver.findElement(".//div[@*[contains(., 'modalLayout__modal-layout')]]");
     }
 
     public enum PopupType {

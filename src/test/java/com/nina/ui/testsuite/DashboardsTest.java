@@ -21,14 +21,14 @@ public class DashboardsTest extends BaseTest {
 
     @BeforeAll
     public static void login() {
-        new LoginSteps().login(EnvironmentPropertyLoader.getProperty("userName"),
+        new LoginSteps(webDriver).login(EnvironmentPropertyLoader.getProperty("userName"),
                 EnvironmentPropertyLoader.getProperty("userPassword"));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"demo", "1333"})
     public void searchDashboard(String searchValue) {
-        new DashboardsSteps()
+        new DashboardsSteps(webDriver)
                 .switchToDefaultProject()
                 .searchDashboard(searchValue)
                 .assertDashboardsSize(1)
@@ -39,7 +39,7 @@ public class DashboardsTest extends BaseTest {
     public void createAndDeleteDashboard() {
         String dashboardName = "Created dashboard " + new Date();
         String dashboardDescription = "test";
-        new DashboardsSteps()
+        new DashboardsSteps(webDriver)
                 .switchToDefaultProject()
                 .createDashboard(dashboardName, dashboardDescription)
                 .assertDashboardContainsName(dashboardName)
@@ -54,13 +54,15 @@ public class DashboardsTest extends BaseTest {
         String dashboardDescription = "test";
         String updatedDashboardName = "Updated name";
         String updatedDashboardDescription = "updated desc";
-        new DashboardsSteps()
+        new DashboardsSteps(webDriver)
                 .switchToDefaultProject()
                 .createDashboard(dashboardName, dashboardDescription)
                 .assertDashboardContainsName(dashboardName)
                 .updateDashboardNameAndDescription(updatedDashboardName, updatedDashboardDescription)
                 .assertDashboardContainsName(updatedDashboardName)
-                .deleteDashboard();
+                .deleteDashboard()
+                .searchDashboard(updatedDashboardName)
+                .assertDashboardsSize(0);
     }
 
     @Test
@@ -68,7 +70,7 @@ public class DashboardsTest extends BaseTest {
         String dashboardName = "Dashboard with widgets " + new Date();
         String dashboardDescription = "test";
         String widgetName = "Widget name " + new Date();
-        new DashboardsSteps()
+        new DashboardsSteps(webDriver)
                 .switchToDefaultProject()
                 .createDashboard(dashboardName, dashboardDescription)
                 .assertDashboardContainsName(dashboardName)
@@ -80,7 +82,7 @@ public class DashboardsTest extends BaseTest {
 
     @Test
     public void changeWidgetOrder() {
-        new DashboardsSteps()
+        new DashboardsSteps(webDriver)
                 .switchToDefaultProject()
                 .selectDashboard(DEFAULT_DASHBOARD_NAME)
                 .changeWidgetsOrder(LAUNCHES_DURATION_WIDGET, LAUNCHES_PERCENTAGE_WIDGET)

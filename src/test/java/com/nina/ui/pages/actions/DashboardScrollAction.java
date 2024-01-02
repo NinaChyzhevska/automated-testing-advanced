@@ -1,35 +1,33 @@
 package com.nina.ui.pages.actions;
 
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
-import org.openqa.selenium.JavascriptExecutor;
-
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$x;
+import com.nina.ui.util.driver.WebBrowserDriver;
+import com.nina.ui.util.driver.WebElement;
 
 public class DashboardScrollAction {
-    private final SelenideElement dashboardElement;
+    private final WebBrowserDriver webBrowserDriver;
+    private final WebElement dashboardElement;
 
-    public DashboardScrollAction(String dashboardName) {
+    public DashboardScrollAction(WebBrowserDriver webBrowserDriver, String dashboardName) {
+        this.webBrowserDriver = webBrowserDriver;
         this.dashboardElement = getDashboardElement(dashboardName);
     }
 
     public DashboardScrollAction scrollToElement() {
-        ((JavascriptExecutor) WebDriverRunner.getWebDriver()).executeScript("arguments[0].scrollIntoView(true);",
-                dashboardElement);
+        webBrowserDriver.executeScript("arguments[0].scrollIntoView(true);", dashboardElement);
         return this;
     }
 
     public DashboardScrollAction verifyElementIsVisible() {
-        dashboardElement.shouldBe(visible);
+        dashboardElement.waitForElementVisibility();
         return this;
     }
 
     public void clickElement() {
-        ((JavascriptExecutor) WebDriverRunner.getWebDriver()).executeScript("arguments[0].click();", dashboardElement);
+        webBrowserDriver.executeScript("arguments[0].click();", dashboardElement);
     }
 
-    private SelenideElement getDashboardElement(String dashboardName) {
-        return $x("//a[contains(@class, 'dashboardTable') and contains(text(), '%s')]".formatted(dashboardName));
+    private WebElement getDashboardElement(String dashboardName) {
+        return webBrowserDriver.findElement("//a[contains(@class, 'dashboardTable') and contains(text(), '"
+                + dashboardName + "')]");
     }
 }

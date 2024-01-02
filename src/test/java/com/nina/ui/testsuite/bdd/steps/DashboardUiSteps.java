@@ -1,6 +1,7 @@
 package com.nina.ui.testsuite.bdd.steps;
 
 import com.nina.ui.steps.DashboardsSteps;
+import com.nina.ui.util.driver.WebDriverFactory;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -10,8 +11,8 @@ public class DashboardUiSteps {
 
     private final DashboardsSteps dashboardsSteps;
 
-    public DashboardUiSteps(DashboardsSteps dashboardsSteps) {
-        this.dashboardsSteps = dashboardsSteps;
+    public DashboardUiSteps() {
+        this.dashboardsSteps = new DashboardsSteps(WebDriverFactory.getWebDriver());
     }
 
     @When("I search the dashboard by name")

@@ -1,26 +1,26 @@
 package com.nina.ui.pages;
 
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.By;
+import com.nina.ui.util.driver.WebBrowserDriver;
+import com.nina.ui.util.driver.WebElement;
 
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.$x;
+import java.util.List;
 
 public class DashboardsPage {
-    private final SelenideElement dashboardPopupButton = $x("//div[@*[contains(., 'addDashboardButton')]]");
-    private final SelenideElement dashboardSearch = $x("//input[@*[contains(., 'inputSearch')]]");
-    private final ElementsCollection dashboardsList = $$(By.xpath("//*[contains(@class, 'gridRow__grid-row-wrapper')]//a"));
+    private final WebBrowserDriver driver;
 
-    public SelenideElement getDashboardPopupButton() {
-        return dashboardPopupButton;
+    public DashboardsPage(WebBrowserDriver driver) {
+        this.driver = driver;
     }
 
-    public SelenideElement getDashboardSearch() {
-        return dashboardSearch;
+    public WebElement getDashboardPopupButton() {
+        return driver.findElement("//div[@*[contains(., 'addDashboardButton')]]");
     }
 
-    public ElementsCollection getDashboardsList() {
-        return dashboardsList;
+    public WebElement getDashboardSearch() {
+        return driver.findElement("//input[@*[contains(., 'inputSearch')]]");
+    }
+
+    public List<WebElement> getDashboardsList() {
+        return driver.findElements("//*[contains(@class, 'gridRow__grid-row-wrapper')]//a");
     }
 }

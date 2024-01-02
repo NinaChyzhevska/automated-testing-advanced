@@ -1,23 +1,24 @@
 package com.nina.ui.steps;
 
 import com.nina.ui.pages.LoginPage;
+import com.nina.ui.util.driver.WebBrowserDriver;
 import com.nina.util.EnvironmentPropertyLoader;
-
-import static com.codeborne.selenide.Selenide.open;
-import static com.nina.ui.util.driver.Waiters.waitPageToLoad;
 
 public class LoginSteps {
 
-    private final LoginPage loginPage = new LoginPage();
+    private final LoginPage loginPage;
+    private final WebBrowserDriver webDriver;
 
-    public LoginSteps() {
-        open(EnvironmentPropertyLoader.getProperty("hostUrl"));
+    public LoginSteps(WebBrowserDriver webDriver) {
+        this.loginPage = new LoginPage(webDriver);
+        this.webDriver = webDriver;
+        webDriver.open(EnvironmentPropertyLoader.getProperty("hostUrl"));
     }
 
     public void login(String userName, String password) {
         loginPage.getUserNameInput().sendKeys(userName);
         loginPage.getPasswordInput().sendKeys(password);
         loginPage.getLoginButton().click();
-        waitPageToLoad();
+        webDriver.waitPageToLoad();
     }
 }

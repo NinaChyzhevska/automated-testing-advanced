@@ -1,123 +1,132 @@
 package com.nina.ui.steps;
 
-import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.WebDriverRunner;
 import com.nina.ui.pages.DashboardDetailsPage;
 import com.nina.ui.pages.DashboardsPage;
 import com.nina.ui.pages.actions.DashboardScrollAction;
 import com.nina.ui.pages.actions.WidgetsSwapAction;
 import com.nina.ui.pages.elements.Popup;
 import com.nina.ui.pages.elements.Popup.PopupType;
+import com.nina.ui.util.driver.WebBrowserDriver;
+import com.nina.ui.util.driver.WebElement;
 import com.nina.util.EnvironmentPropertyLoader;
-import org.openqa.selenium.interactions.Actions;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.nina.ui.util.driver.Waiters.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 public class DashboardsSteps {
 
     private static final String DEFAULT_PROJECT_NAME = "vinni_personal";
 
-    private final DashboardsPage dashboardsPage = new DashboardsPage();
-    private final DashboardDetailsPage dashboardDetailsPage = new DashboardDetailsPage();
+    private final WebBrowserDriver webDriver;
+    private final DashboardsPage dashboardsPage;
+    private final DashboardDetailsPage dashboardDetailsPage;
     private WidgetsSwapAction widgetsSwapAction;
+
+    public DashboardsSteps(WebBrowserDriver webDriver) {
+        this.webDriver = webDriver;
+        this.dashboardsPage = new DashboardsPage(webDriver);
+        this.dashboardDetailsPage = new DashboardDetailsPage(webDriver);
+    }
 
     public DashboardsSteps createDashboard(String dashboardName, String dashboardDescription) {
         dashboardsPage.getDashboardPopupButton().click();
-        new Popup(PopupType.ADD)
+        new Popup(webDriver, PopupType.ADD)
                 .waitToLoad()
                 .enterName(dashboardName)
                 .enterDescription(dashboardDescription)
                 .submit();
-        waitPageToLoad();
+        webDriver.waitPageToLoad();
         return this;
     }
 
     public DashboardsSteps switchToDefaultProject() {
         var url = String.format("%s/ui/#%s/dashboard", EnvironmentPropertyLoader.getProperty("hostUrl"),
                 DEFAULT_PROJECT_NAME);
-        Selenide.open(url);
-        waitPageToLoad();
+        webDriver.open(url);
+        webDriver.waitPageToLoad();
         return this;
     }
 
     public DashboardsSteps searchDashboard(String searchValue) {
         dashboardsPage.getDashboardSearch().sendKeys(searchValue);
-        waitPageToLoad();
+        webDriver.waitPageToLoad();
         return this;
     }
 
     public DashboardsSteps assertDashboardsSize(int expectedSize) {
-        dashboardsPage.getDashboardsList().shouldHave(CollectionCondition.size(expectedSize));
+        webDriver.waitUntil(() -> assertThat(dashboardsPage.getDashboardsList(), hasSize(expectedSize)));
         return this;
     }
 
     public DashboardsSteps assertDashboardsListContains(String dashboardName) {
-        dashboardsPage.getDashboardsList().shouldHave(CollectionCondition.texts(dashboardName));
+        webDriver.waitUntil(() -> {
+            boolean containsDashboard = dashboardsPage.getDashboardsList().stream().map(WebElement::getText)
+                    .anyMatch(text -> text.toLowerCase().contains(dashboardName));
+            assertThat(containsDashboard, is(true));
+        });
         return this;
     }
 
     public DashboardsSteps assertDashboardContainsName(String dashboardName) {
-        dashboardDetailsPage.getDashboardTitle(dashboardName).shouldHave(text(dashboardName));
+        dashboardDetailsPage.getDashboardTitle(dashboardName).shouldHaveText(dashboardName);
         return this;
     }
 
     public DashboardsSteps deleteDashboard() {
         dashboardDetailsPage.getButtonDelete().click();
-        new Popup(PopupType.DELETE).waitToLoad().submit();
-        waitPageToLoad();
+        new Popup(webDriver, PopupType.DELETE).waitToLoad().submit();
+        webDriver.waitPageToLoad();
         return this;
     }
 
     public DashboardsSteps updateDashboardNameAndDescription(String updatedDashboardName, String updatedDashboardDescription) {
         dashboardDetailsPage.getButtonEdit().click();
-        new Popup(PopupType.UPDATE)
+        new Popup(webDriver, PopupType.UPDATE)
                 .waitToLoad()
                 .enterName(updatedDashboardName)
                 .enterDescription(updatedDashboardDescription)
                 .submit();
-        waitForElementVisibility(dashboardDetailsPage.getDashboardTitle(updatedDashboardName));
+        dashboardDetailsPage.getDashboardTitle(updatedDashboardName).waitForElementVisibility();
         return this;
     }
 
     public DashboardsSteps addWidgetToDashboard(String widgetName) {
         dashboardDetailsPage.getButtonAddNewWidget().click();
-        waitForElementVisibility(dashboardDetailsPage.getWidgetType());
+        dashboardDetailsPage.getWidgetType().waitForElementVisibility();
         dashboardDetailsPage.getWidgetType().click();
         dashboardDetailsPage.getButtonNextStep().click();
-        waitForElementVisibility(dashboardDetailsPage.getFilterOption());
+        dashboardDetailsPage.getFilterOption().waitForElementVisibility();
         dashboardDetailsPage.getFilterOption().click();
         dashboardDetailsPage.getButtonNextStep().click();
-        new Popup(PopupType.ADD)
+        new Popup(webDriver, PopupType.ADD)
                 .enterName(widgetName)
                 .submit();
-        waitForElementVisibility(dashboardDetailsPage.getWidgetHeader(widgetName));
+        dashboardDetailsPage.getWidgetHeader(widgetName).waitForElementVisibility();
         return this;
     }
 
     public DashboardsSteps removeWidgetFromDashboard(String widgetName) {
-        Actions actions = new Actions(WebDriverRunner.getWebDriver());
-        actions.moveToElement(dashboardDetailsPage.getWidgetHeader(widgetName)).perform();
+        WebElement widgetHeader = dashboardDetailsPage.getWidgetHeader(widgetName);
+        widgetHeader.moveTo();
         dashboardDetailsPage.getDeleteWidgetHiddenButton().click();
-        new Popup(PopupType.DELETE).waitToLoad().submit();
-        waitUntilElementToBeClickable(dashboardDetailsPage.getButtonAddNewWidget());
+        new Popup(webDriver, PopupType.DELETE).submit();
+        dashboardDetailsPage.getButtonAddNewWidget().waitUntilElementToBeClickable();
         return this;
     }
 
     public DashboardsSteps assertWidgetIsPresentOnDashboard(String widgetName) {
-        dashboardDetailsPage.getWidgetHeader(widgetName).shouldHave(text(widgetName));
+        dashboardDetailsPage.getWidgetHeader(widgetName).shouldHaveText(widgetName);
         return this;
     }
 
     public void assertThatThereIsNoWidgets() {
-        waitForElementVisibility(dashboardDetailsPage.getEmptyWidgetsGrid());
+        dashboardDetailsPage.getEmptyWidgetsGrid().waitForElementVisibility();
     }
 
     public DashboardsSteps changeWidgetsOrder(String firstWidget, String secondWidget) {
-        waitForElementVisibility(dashboardDetailsPage.getWidgetHeader(firstWidget));
-        waitForElementVisibility(dashboardDetailsPage.getWidgetHeader(secondWidget));
-        this.widgetsSwapAction = new WidgetsSwapAction(firstWidget, secondWidget);
+        dashboardDetailsPage.getWidgetHeader(firstWidget).waitForElementVisibility();
+        dashboardDetailsPage.getWidgetHeader(secondWidget).waitForElementVisibility();
+        this.widgetsSwapAction = new WidgetsSwapAction(webDriver, firstWidget, secondWidget);
         widgetsSwapAction.swapWidgets();
         return this;
     }
@@ -128,7 +137,10 @@ public class DashboardsSteps {
     }
 
     public DashboardsSteps selectDashboard(String dashboardName) {
-        new DashboardScrollAction(dashboardName).scrollToElement().verifyElementIsVisible().clickElement();
+        new DashboardScrollAction(webDriver, dashboardName)
+                .scrollToElement()
+                .verifyElementIsVisible()
+                .clickElement();
         return this;
     }
 }

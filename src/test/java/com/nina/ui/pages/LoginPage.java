@@ -1,28 +1,28 @@
 package com.nina.ui.pages;
 
-import com.codeborne.selenide.SelenideElement;
-
-import static com.codeborne.selenide.Selenide.$x;
+import com.nina.ui.util.driver.WebBrowserDriver;
+import com.nina.ui.util.driver.WebElement;
 
 public class LoginPage {
-    private final SelenideElement loginForm = $x("//form[@*[contains(., 'loginForm')]]");
-    private final SelenideElement userNameInput = loginForm.$x(".//input[@name='login']");
-    private final SelenideElement passwordInput = loginForm.$x(".//input[@name='password']");
-    private final SelenideElement loginButton = loginForm.$x(".//button[@type='submit']");
+    private final WebBrowserDriver driver;
 
-    public SelenideElement getLoginForm() {
-        return loginForm;
+    public LoginPage(WebBrowserDriver webDriver) {
+        this.driver = webDriver;
     }
 
-    public SelenideElement getUserNameInput() {
-        return userNameInput;
+    public WebElement getLoginForm() {
+        return driver.findElement("//form[@*[contains(., 'loginForm')]]");
     }
 
-    public SelenideElement getPasswordInput() {
-        return passwordInput;
+    public WebElement getUserNameInput() {
+        return getLoginForm().findElement(".//input[@name='login']");
     }
 
-    public SelenideElement getLoginButton() {
-        return loginButton;
+    public WebElement getPasswordInput() {
+        return getLoginForm().findElement(".//input[@name='password']");
+    }
+
+    public WebElement getLoginButton() {
+        return getLoginForm().findElement(".//button[@type='submit']");
     }
 }
