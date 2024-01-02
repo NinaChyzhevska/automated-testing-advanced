@@ -34,31 +34,31 @@ public class LoggingWebDriver implements WebBrowserDriver {
 
     @Override
     public WebElement findElement(String path) {
-        logger.trace("Looking for element by xpath: " + path);
+        logger.info("Looking for element by xpath: " + path);
         return delegate.findElement(path);
     }
 
     @Override
     public List<WebElement> findElements(String xpath) {
-        logger.trace("Looking for elements by xpath: " + xpath);
+        logger.info("Looking for elements by xpath: " + xpath);
         return delegate.findElements(xpath);
     }
 
     @Override
     public Object executeScript(String script, WebElement... elements) {
-        logger.trace("Executing JS script: " + script);
+        logger.info("Executing JS script: " + script);
         return delegate.executeScript(script, elements);
     }
 
     @Override
     public void waitPageToLoad() {
-        logger.trace("Waiting page to be loaded");
+        logger.info("Waiting page to be loaded");
         delegate.waitPageToLoad();
     }
 
     @Override
     public void waitUntil(Runnable runnable) {
-        logger.trace("Waiting for runnable to execute");
+        logger.info("Waiting for runnable to execute");
         delegate.waitUntil(runnable);
     }
 }

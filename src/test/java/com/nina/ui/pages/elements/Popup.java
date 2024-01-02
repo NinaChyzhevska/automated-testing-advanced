@@ -34,6 +34,7 @@ public class Popup {
 
     public void submit() {
         var submitBtn = getSubmitBtn();
+        submitBtn.waitForElementVisibility();
         submitBtn.waitUntilElementToBeClickable();
         submitBtn.click();
     }

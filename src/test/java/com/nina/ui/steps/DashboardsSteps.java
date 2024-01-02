@@ -29,6 +29,8 @@ public class DashboardsSteps {
     }
 
     public DashboardsSteps createDashboard(String dashboardName, String dashboardDescription) {
+        dashboardsPage.getDashboardPopupButton().waitForElementVisibility();
+        dashboardsPage.getDashboardPopupButton().waitUntilElementToBeClickable();
         dashboardsPage.getDashboardPopupButton().click();
         new Popup(webDriver, PopupType.ADD)
                 .waitToLoad()
