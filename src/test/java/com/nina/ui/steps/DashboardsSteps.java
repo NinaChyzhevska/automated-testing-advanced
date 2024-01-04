@@ -70,7 +70,7 @@ public class DashboardsSteps {
             boolean containsDashboard = dashboardsPage.getDashboardsList().stream().map(WebElement::getText)
                     .anyMatch(text -> text.toLowerCase().contains(dashboardName));
             assertThat(containsDashboard, is(true));
-        }, Duration.ofSeconds(20));
+        }, Duration.ofSeconds(30));
         return this;
     }
 

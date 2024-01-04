@@ -3,21 +3,24 @@ package com.nina.ui.testsuite;
 import com.nina.ui.steps.DashboardsSteps;
 import com.nina.ui.steps.LoginSteps;
 import com.nina.util.EnvironmentPropertyLoader;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Date;
 
+@Execution(ExecutionMode.SAME_THREAD)
 public class DashboardsTest extends BaseTest {
 
     private static final String DEFAULT_DASHBOARD_NAME = "DEMO DASHBOARD";
     private static final String LAUNCHES_DURATION_WIDGET = "LAUNCHES DURATION CHART";
     private static final String LAUNCHES_PERCENTAGE_WIDGET = "INVESTIGATED PERCENTAGE OF LAUNCHES";
 
-    @BeforeEach
-    public void login() {
+    @BeforeAll
+    public static void login() {
         new LoginSteps(webDriver).login(EnvironmentPropertyLoader.getProperty("userName"),
                 EnvironmentPropertyLoader.getProperty("userPassword"));
     }
