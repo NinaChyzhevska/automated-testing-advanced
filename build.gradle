@@ -47,5 +47,10 @@ test {
 
     testLogging.showStandardStreams = true
     systemProperties['envName'] = System.getProperty('envName') ?: 'prod'
+    systemProperties['browser'] = System.getProperty('browser') ?: 'chrome'
     systemProperties['selenide.headless'] = System.getProperty('selenide.headless') ?: 'false'
+
+    if (System.getProperty('enableSelenoid')) {
+        systemProperties['selenide.remote'] = System.getProperty('selenide.remote') ?: 'http://localhost:4444/wd/hub'
+    }
 }
