@@ -1,5 +1,6 @@
 package com.nina.ui.steps;
 
+import com.nina.ui.configuration.UITestsConfig;
 import com.nina.ui.pages.DashboardDetailsPage;
 import com.nina.ui.pages.DashboardsPage;
 import com.nina.ui.pages.actions.DashboardScrollAction;
@@ -10,8 +11,11 @@ import com.nina.ui.util.driver.WebBrowserDriver;
 import com.nina.ui.util.driver.WebElement;
 import com.nina.util.EnvironmentPropertyLoader;
 
+import java.time.Duration;
+
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
 public class DashboardsSteps {
 
@@ -56,7 +60,8 @@ public class DashboardsSteps {
     }
 
     public DashboardsSteps assertDashboardsSize(int expectedSize) {
-        webDriver.waitUntil(() -> assertThat(dashboardsPage.getDashboardsList(), hasSize(expectedSize)));
+        webDriver.waitUntil(() -> assertThat(dashboardsPage.getDashboardsList(), hasSize(expectedSize)),
+                Duration.ofSeconds(UITestsConfig.WAIT_TIMEOUT));
         return this;
     }
 
@@ -65,7 +70,7 @@ public class DashboardsSteps {
             boolean containsDashboard = dashboardsPage.getDashboardsList().stream().map(WebElement::getText)
                     .anyMatch(text -> text.toLowerCase().contains(dashboardName));
             assertThat(containsDashboard, is(true));
-        });
+        }, Duration.ofSeconds(20));
         return this;
     }
 

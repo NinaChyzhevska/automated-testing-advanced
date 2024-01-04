@@ -3,6 +3,7 @@ package com.nina.ui.util.driver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.List;
 
 public class LoggingWebDriver implements WebBrowserDriver {
@@ -57,8 +58,8 @@ public class LoggingWebDriver implements WebBrowserDriver {
     }
 
     @Override
-    public void waitUntil(Runnable runnable) {
+    public void waitUntil(Runnable runnable, Duration timeout) {
         logger.info("Waiting for runnable to execute");
-        delegate.waitUntil(runnable);
+        delegate.waitUntil(runnable, timeout);
     }
 }

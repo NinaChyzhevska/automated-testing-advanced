@@ -94,8 +94,8 @@ public class SeleniumWebDriver implements WebBrowserDriver {
     }
 
     @Override
-    public void waitUntil(Runnable runnable) {
-        waiter.until(webDriver -> {
+    public void waitUntil(Runnable runnable, Duration timeout) {
+        waiter.withTimeout(timeout).until(webDriver -> {
             try {
                 runnable.run();
                 return true;

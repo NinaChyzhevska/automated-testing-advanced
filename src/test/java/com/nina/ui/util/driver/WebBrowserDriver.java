@@ -1,5 +1,6 @@
 package com.nina.ui.util.driver;
 
+import java.time.Duration;
 import java.util.List;
 
 public interface WebBrowserDriver {
@@ -17,5 +18,5 @@ public interface WebBrowserDriver {
 
     void waitPageToLoad();
 
-    void waitUntil(Runnable runnable);
+    void waitUntil(Runnable runnable, Duration timeout);
 }

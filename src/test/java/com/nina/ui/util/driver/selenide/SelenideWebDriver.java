@@ -6,6 +6,7 @@ import com.nina.ui.util.driver.WebBrowserDriver;
 import com.nina.ui.util.driver.WebElement;
 import org.openqa.selenium.JavascriptExecutor;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -63,8 +64,8 @@ public class SelenideWebDriver implements WebBrowserDriver {
     }
 
     @Override
-    public void waitUntil(Runnable runnable) {
-        Wait().until(webDriver -> {
+    public void waitUntil(Runnable runnable, Duration timeout) {
+        Wait().withTimeout(timeout).until(webDriver -> {
             try {
                 runnable.run();
                 return true;
