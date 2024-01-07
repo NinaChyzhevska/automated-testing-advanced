@@ -1,6 +1,7 @@
 package com.nina.ui.testsuite.bdd.steps;
 
 import com.nina.ui.steps.LoginSteps;
+import com.nina.ui.util.driver.WebDriverFactory;
 import com.nina.util.EnvironmentPropertyLoader;
 import io.cucumber.java.en.Given;
 
@@ -10,8 +11,8 @@ public class LoginUiStep {
 
     private final LoginSteps loginSteps;
 
-    public LoginUiStep(LoginSteps loginSteps) {
-        this.loginSteps = loginSteps;
+    public LoginUiStep() {
+        this.loginSteps = new LoginSteps(WebDriverFactory.getWebDriver());
     }
 
     @Given("I am logged in to the report portal in the UI")

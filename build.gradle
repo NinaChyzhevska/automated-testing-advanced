@@ -26,7 +26,10 @@ dependencies {
     testImplementation 'org.testng:testng:7.8.0'
 
     // UI testing
-    testImplementation 'com.codeborne:selenide:6.19.0'
+    testImplementation 'com.codeborne:selenide:7.0.4'
+
+    // Alternative UI testing framework
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.16.1'
 
     // Logging
     testImplementation 'org.slf4j:slf4j-api:2.0.9'
@@ -38,6 +41,9 @@ dependencies {
     testImplementation 'io.cucumber:cucumber-junit:7.14.0'
     testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.14.0'
     testImplementation 'io.cucumber:cucumber-picocontainer:7.14.0'
+
+    // Utils
+    testImplementation 'commons-io:commons-io:2.15.1'
 }
 
 test {
@@ -45,7 +51,12 @@ test {
 
     testLogging.showStandardStreams = true
     systemProperties['envName'] = System.getProperty('envName') ?: 'prod'
+    systemProperties['browser'] = System.getProperty('browser') ?: 'chrome'
     systemProperties['selenide.headless'] = System.getProperty('selenide.headless') ?: 'false'
+
+    if (System.getProperty('enableSelenoid')) {
+        systemProperties['selenide.remote'] = System.getProperty('selenide.remote') ?: 'http://localhost:4444/wd/hub'
+    }
 }
 
 sonar {
