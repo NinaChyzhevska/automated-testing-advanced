@@ -34,8 +34,8 @@ public class DashboardTestNgSuite extends TestNgBaseAuthTest {
         Long id = created.getId();
 
         Dashboard searchResult = dashboardClient.getDashboardById(HttpStatus.SC_OK, id);
-        assertEquals(name, searchResult.getName());
-        assertEquals(description, searchResult.getDescription());
+        assertEquals(searchResult.getName(), name);
+        assertEquals(searchResult.getDescription(), description);
 
         deleteDashboard(id);
         dashboardClient.getDashboardById(HttpStatus.SC_NOT_FOUND, id);
@@ -53,20 +53,20 @@ public class DashboardTestNgSuite extends TestNgBaseAuthTest {
         Dashboard created = dashboardClient.createDashboard(HttpStatus.SC_CREATED, name, description);
 
         SearchDashboardsResponse response = dashboardClient.searchDashboards(name);
-        assertEquals(1, response.getPage().getTotalElements());
-        assertEquals(1, response.getPage().getTotalPages());
+        assertEquals(response.getPage().getTotalElements(), 1);
+        assertEquals(response.getPage().getTotalPages(), 1);
 
         List<Dashboard> dashboards = response.getContent();
         assertNotNull(dashboards);
-        assertEquals(1, dashboards.size());
+        assertEquals(dashboards.size(), 1);
         Dashboard found = dashboards.get(0);
-        assertEquals(created.getId(), found.getId());
+        assertEquals(found.getId(), created.getId());
 
         deleteDashboard(created.getId());
 
         SearchDashboardsResponse responseAfterRemoval = dashboardClient.searchDashboards(name);
         assertTrue(responseAfterRemoval.getContent().isEmpty());
-        assertEquals(0, responseAfterRemoval.getPage().getTotalElements());
+        assertEquals(responseAfterRemoval.getPage().getTotalElements(), 0);
     }
 
     @Test
@@ -82,12 +82,12 @@ public class DashboardTestNgSuite extends TestNgBaseAuthTest {
 
         Dashboard searchResult = dashboardClient.getDashboardById(HttpStatus.SC_OK, dashboardId);
         List<Widget> widgets = searchResult.getWidgets();
-        assertEquals(1, widgets.size());
+        assertEquals(widgets.size(), 1);
         assertEquals(TEST_WIDGET_ID, widgets.get(0).getWidgetId());
     }
 
     private void deleteDashboard(long id) {
         ResponseMessage deleteResult = dashboardClient.deleteDashboardById(id);
-        assertEquals("Dashboard with ID = '" + id + "' successfully deleted.", deleteResult.getMessage());
+        assertEquals(deleteResult.getMessage(), "Dashboard with ID = '" + id + "' successfully deleted.");
     }
 }
