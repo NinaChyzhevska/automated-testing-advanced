@@ -38,6 +38,10 @@ dependencies {
     testImplementation 'io.cucumber:cucumber-junit:7.14.0'
     testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.14.0'
     testImplementation 'io.cucumber:cucumber-picocontainer:7.14.0'
+
+    // Report Portal
+    testImplementation 'com.epam.reportportal:agent-java-junit5:5.1.11'
+    testImplementation 'com.epam.reportportal:logger-java-logback:5.1.6'
 }
 
 test {
@@ -46,6 +50,7 @@ test {
     testLogging.showStandardStreams = true
     systemProperties['envName'] = System.getProperty('envName') ?: 'prod'
     systemProperties['selenide.headless'] = System.getProperty('selenide.headless') ?: 'false'
+    systemProperty 'junit.jupiter.extensions.autodetection.enabled', true
 }
 
 sonar {
